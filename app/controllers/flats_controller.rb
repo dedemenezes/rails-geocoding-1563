@@ -4,6 +4,17 @@ class FlatsController < ApplicationController
   # GET /flats or /flats.json
   def index
     @flats = Flat.all
+
+    @markers = @flats.geocoded.map do |flat|
+      {
+        lng: flat.longitude,
+        lat: flat.latitude,
+        info_window: render_to_string(partial: 'info_window', locals: { flat: flat }),
+        marker_html: render_to_string(partial: "marker", locals: { flat: flat })
+      }
+    end
+
+    # [{lng: 12.5926589, lat: 12,324235}, {}, {}]
   end
 
   # GET /flats/1 or /flats/1.json
